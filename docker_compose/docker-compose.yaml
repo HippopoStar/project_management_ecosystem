@@ -1,0 +1,94 @@
+
+services:
+
+  nginx:
+    container_name: nginx
+    image: nginxinc/nginx-unprivileged:${DOCKER_IMAGE_TAG_NGINX}
+    ports:
+      - '8080:8080'
+    volumes:
+      - type: bind
+        source: ./bind_mounts/nginx/conf.d/default.conf
+        target: /tmp/default.conf
+        read_only: true
+      - type: bind
+        source: ./bind_mounts/nginx/envsubst_default_conf.sh
+        target: /docker-entrypoint.d/envsubst_default_conf.sh
+        read_only: true
+    environment:
+      - GITLAB_SERVER_ADDR=${GITLAB_HOSTNAME}
+    extra_hosts:
+      - '${GITLAB_HOSTNAME}:172.31.42.10'
+    networks:
+      - nginx-gitlab
+    restart: always
+    depends_on:
+      - gitlab
+
+  gitlab:
+    container_name: gitlab
+    image: gitlab/gitlab-ce:${DOCKER_IMAGE_TAG_GITLAB}
+    hostname: '${GITLAB_HOSTNAME}'
+    ports:
+      - '22:22'
+      - '80:80'
+      - '443:443'
+#    expose:
+#      - '80'
+#      - '443'
+    volumes:
+      - type: bind
+        source: '${GITLAB_HOME}/config'
+        target: '/etc/gitlab'
+      - type: bind
+        source: '${GITLAB_HOME}/logs'
+        target: '/var/log/gitlab'
+      - type: bind
+        source: '${GITLAB_HOME}/data'
+        target: '/var/opt/gitlab'
+    environment:
+      GITLAB_LOG_LEVEL: 'WARN'
+      GITLAB_SKIP_TAIL_LOGS: 'true'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://${GITLAB_HOSTNAME}'
+        # Add any other gitlab.rb configuration here, each on its own line
+        registry['log_level'] = 'warn'
+        gitlab_shell['log_level'] = 'WARN'
+        gitaly['configuration'] = {
+          logging: {
+            level: "warn"
+          }
+        }
+    networks:
+      nginx-gitlab:
+        ipv4_address: 172.31.42.10
+    shm_size: '256m' # shared memory size
+    restart: always
+
+#  gitlab-runner:
+#    container_name: gitlab-runner
+#    image: gitlab/gitlab-runner:${DOCKER_IMAGE_TAG_GITLAB_RUNNER}
+
+#  sonarqube:
+#    container_name: sonarqube
+#    image: sonarqube:${DOCKER_IMAGE_TAG_SONARQUBE}
+
+#  jenkins:
+#    container_name: jenkins
+#    image: jenkins/jenkins:${DOCKER_IMAGE_TAG_JENKINS}
+
+#  redmine:
+#    container_name: redmine
+#    image: redmine:${DOCKER_IMAGE_TAG_REDMINE}
+
+#  postgres:
+#    container_name: postgres
+#    image: postgres:${DOCKER_IMAGE_TAG_POSTGRES}
+
+networks:
+  nginx-gitlab:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.31.42.0/24
+
