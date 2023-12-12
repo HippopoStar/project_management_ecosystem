@@ -31,7 +31,7 @@
 [NGINX - Documentation - Admin Guide - Security Controls - Securing HTTP Traffic to Upstream Servers](https://docs.nginx.com/nginx/admin-guide/security-controls/securing-http-traffic-upstream/)  
 [Docker - Blog - How to Use the NGINX Docker Official Image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/)  
 [DockerHub - nginx](https://hub.docker.com/_/nginx)  
-[DockerHub - nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
+[DockerHub - nginxinc/nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
 
 ### GitLab
 [GitLab - GitLab.org - omnibus-gitlab - docker/assets/wrapper](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/docker/assets/wrapper)  
@@ -42,6 +42,8 @@
 [DockerHub - gitlab/gitlab-ce](https://hub.docker.com/r/gitlab/gitlab-ce)  
 
 ### GitLab Runner
+[GitHub - Yelp - dumb-init](https://github.com/Yelp/dumb-init)  
+[GitLab - GitLab.org - gitlab-runner - dockerfiles/runner/ubuntu/entrypoint](https://gitlab.com/gitlab-org/gitlab-runner/-/blob/main/dockerfiles/runner/ubuntu/entrypoint)  
 [GitLab - Product Documentation - Install - Install GitLab Runner - Docker](https://docs.gitlab.com/runner/install/docker.html)  
 [DockerHub - gitlab/gitlab-runner](https://hub.docker.com/r/gitlab/gitlab-runner)  
 
