@@ -16,9 +16,10 @@ services:
         target: /docker-entrypoint.d/envsubst_default_conf.sh
         read_only: true
     environment:
-      - GITLAB_SERVER_ADDR=${GITLAB_HOSTNAME}
+      - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
+      - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
     extra_hosts:
-      - '${GITLAB_HOSTNAME}:172.31.42.10'
+      - '${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}:172.31.42.10'
     networks:
       - nginx-gitlab
     restart: always
@@ -28,14 +29,12 @@ services:
   gitlab:
     container_name: gitlab
     image: gitlab/gitlab-ce:${DOCKER_IMAGE_TAG_GITLAB}
-    hostname: '${GITLAB_HOSTNAME}'
+    hostname: '${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
     ports:
-      - '22:22'
-      - '80:80'
-      - '443:443'
-#    expose:
-#      - '80'
-#      - '443'
+      - '2222:22'
+    expose:
+      - '80'
+      - '443'
     volumes:
       - type: bind
         source: '${GITLAB_HOME}/config'
@@ -50,7 +49,7 @@ services:
       GITLAB_LOG_LEVEL: 'WARN'
       GITLAB_SKIP_TAIL_LOGS: 'true'
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://${GITLAB_HOSTNAME}'
+        external_url 'https://${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
         # Add any other gitlab.rb configuration here, each on its own line
         registry['log_level'] = 'warn'
         gitlab_shell['log_level'] = 'WARN'
