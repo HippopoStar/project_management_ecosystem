@@ -8,11 +8,11 @@ services:
       - '8080:8080'
     volumes:
       - type: bind
-        source: ./bind_mounts/nginx/conf.d/default.conf
+        source: ./services/nginx/configs/default.conf
         target: /tmp/default.conf
         read_only: true
       - type: bind
-        source: ./bind_mounts/nginx/envsubst_default_conf.sh
+        source: ./services/nginx/bind_mounts/envsubst_default_conf.sh
         target: /docker-entrypoint.d/envsubst_default_conf.sh
         read_only: true
     environment:
@@ -24,7 +24,8 @@ services:
       - nginx-gitlab
     restart: always
     depends_on:
-      - gitlab
+      gitlab:
+        condition: service_started # service_healthy
 
   gitlab:
     container_name: gitlab
@@ -37,6 +38,14 @@ services:
       - '443'
     volumes:
       - type: bind
+        source: ./services/gitlab/configs/gitlab.rb
+        target: /etc/gitlab/gitlab.rb
+        read_only: true
+      - type: bind
+        source: ./services/gitlab/bind_mounts/gitlab_pre_reconfigure_script.sh
+        target: /tmp/gitlab_pre_reconfigure_script.sh
+        read_only: true
+      - type: bind
         source: '${GITLAB_HOME}/config'
         target: '/etc/gitlab'
       - type: bind
@@ -46,22 +55,22 @@ services:
         source: '${GITLAB_HOME}/data'
         target: '/var/opt/gitlab'
     environment:
+      GITLAB_PRE_RECONFIGURE_SCRIPT: /tmp/gitlab_pre_reconfigure_script.sh
       GITLAB_LOG_LEVEL: 'WARN'
       GITLAB_SKIP_TAIL_LOGS: 'true'
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
         # Add any other gitlab.rb configuration here, each on its own line
-        registry['log_level'] = 'warn'
-        gitlab_shell['log_level'] = 'WARN'
-        gitaly['configuration'] = {
-          logging: {
-            level: "warn"
-          }
-        }
     networks:
       nginx-gitlab:
         ipv4_address: 172.31.42.10
     shm_size: '256m' # shared memory size
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/gitlab/bin/gitlab-healthcheck --fail --max-time 10" ]
+      interval: 1m0s
+      timeout: 30s
+      retries: 5
+      start_period: 0s
     restart: always
 
 #  gitlab-runner:
