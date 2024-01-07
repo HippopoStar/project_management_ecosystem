@@ -59,7 +59,7 @@ services:
       GITLAB_LOG_LEVEL: 'WARN'
       GITLAB_SKIP_TAIL_LOGS: 'true'
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
+        external_url 'http://${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
         # Add any other gitlab.rb configuration here, each on its own line
     networks:
       nginx-gitlab:
@@ -71,7 +71,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 0s
-    restart: always
+#    restart: always
 
 #  gitlab-runner:
 #    container_name: gitlab-runner

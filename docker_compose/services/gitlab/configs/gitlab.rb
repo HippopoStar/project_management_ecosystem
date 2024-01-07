@@ -710,7 +710,7 @@
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
 ####!   is created and seeded won't yield any change.**
-# gitlab_rails['initial_root_password'] = "password"
+gitlab_rails['initial_root_password'] = "5iveL!fe"
 # gitlab_rails['initial_shared_runners_registration_token'] = "token"
 
 #### Toggle if root password should be printed to STDOUT during initialization
@@ -1157,7 +1157,7 @@
 # puma['enable'] = true
 # puma['ha'] = false
 # puma['worker_timeout'] = 60
-# puma['worker_processes'] = 2
+puma['worker_processes'] = 2
 # puma['min_threads'] = 4
 # puma['max_threads'] = 4
 
@@ -1217,7 +1217,7 @@
 # sidekiq['log_format'] = "json"
 # sidekiq['shutdown_timeout'] = 4
 # sidekiq['interval'] = nil
-# sidekiq['max_concurrency'] = 20
+sidekiq['max_concurrency'] = 9
 # sidekiq['min_concurrency'] = nil
 
 ##! GitLab allows route a job to a particular queue determined by an array of ##! routing rules.
@@ -2463,7 +2463,7 @@
 # gitlab_exporter['consul_service_meta'] = {}
 
 # To completely disable prometheus, and all of it's exporters, set to false
-# prometheus_monitoring['enable'] = true
+prometheus_monitoring['enable'] = false
 
 ################################################################################
 ## Gitaly

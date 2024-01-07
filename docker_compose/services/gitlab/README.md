@@ -26,3 +26,13 @@ GITLAB_HOME=/srv/gitlab
 openssl x509 -in ${GITLAB_HOME}/config/ssl/${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}.crt -noout -text
 ```
 
+## Get initial root password
+[GitLab - Product documentation - Administer - Administer users - Reset user password - Reset the root password](https://docs.gitlab.com/ee/security/reset_user_password.html#reset-the-root-password)  
+[GitLab - GitLab.org - omnibus-gitlab - README.md - After installation](https://gitlab.com/gitlab-org/omnibus-gitlab#after-installation)  
+[GitLab - GitLab.org - omnibus-gitlab - files/gitlab-config-template/gitlab.rb.template - L713](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L713)  
+```
+DOCKER_COMPOSE_SERVICE_GITLAB_NAME=gitlab
+
+docker exec "${DOCKER_COMPOSE_SERVICE_GITLAB_NAME}" cat /etc/gitlab/initial_root_password
+```
+
