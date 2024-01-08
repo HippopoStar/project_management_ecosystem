@@ -5,7 +5,8 @@ services:
     container_name: nginx
     image: nginxinc/nginx-unprivileged:${DOCKER_IMAGE_TAG_NGINX}
     ports:
-      - '8080:8080'
+      - '8080:80'
+      - '8443:443'
     volumes:
       - type: bind
         source: ./services/nginx/configs/default.conf
@@ -25,7 +26,7 @@ services:
     restart: always
     depends_on:
       gitlab:
-        condition: service_started # service_healthy
+        condition: service_started # service_started | service_healthy
 
   gitlab:
     container_name: gitlab

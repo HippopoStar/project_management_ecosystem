@@ -1658,11 +1658,11 @@ sidekiq['max_concurrency'] = 9
 
 ##! **Override only if you use a reverse proxy**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-the-nginx-listen-port
-# nginx['listen_port'] = nil
+nginx['listen_port'] = 80
 
 ##! **Override only if your reverse proxy internally communicates over HTTP**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#supporting-proxied-ssl
-# nginx['listen_https'] = nil
+nginx['listen_https'] = false
 
 ##! **Override only if you use a reverse proxy with proxy protocol enabled**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#configuring-proxy-protocol
@@ -2709,7 +2709,7 @@ prometheus_monitoring['enable'] = false
 ################################################################################
 # Let's Encrypt integration
 ################################################################################
-# letsencrypt['enable'] = nil
+letsencrypt['enable'] = false
 # letsencrypt['contact_emails'] = [] # This should be an array of email addresses to add as contacts
 # letsencrypt['group'] = 'root'
 # letsencrypt['key_size'] = 2048
