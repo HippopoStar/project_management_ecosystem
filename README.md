@@ -28,8 +28,8 @@
 
 ### NGINX
 [NGINX - Education - Glossary - What Is a Reverse Proxy Server?](https://www.nginx.com/resources/glossary/reverse-proxy-server/)  
-[NGINX - Documentation - Admin Guide - Security Controls - Securing HTTP Traffic to Upstream Servers](https://docs.nginx.com/nginx/admin-guide/security-controls/securing-http-traffic-upstream/)  
 [Docker - Blog - How to Use the NGINX Docker Official Image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/)  
+[Docker - Blog - SSL/TLS Offloading, Encryption, and Certificates with NGINX and NGINX Plus](https://www.nginx.com/blog/nginx-ssl/)  
 [DockerHub - nginx](https://hub.docker.com/_/nginx)  
 [DockerHub - nginxinc/nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
 

@@ -16,9 +16,19 @@ services:
         source: ./services/nginx/bind_mounts/envsubst_default_conf.sh
         target: /docker-entrypoint.d/envsubst_default_conf.sh
         read_only: true
+      - type: bind
+        source: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE}
+        target: /etc/nginx/${SERVER_CERTIFICATE}
+        read_only: true
+      - type: bind
+        source: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE_KEY}
+        target: /etc/nginx/${SERVER_CERTIFICATE_KEY}
+        read_only: true
     environment:
       - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
       - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
+      - SERVER_CERTIFICATE=${SERVER_CERTIFICATE}
+      - SERVER_CERTIFICATE_KEY=${SERVER_CERTIFICATE_KEY}
     extra_hosts:
       - '${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}:172.31.42.10'
     networks:
