@@ -32,6 +32,9 @@
 [Docker - Blog - SSL/TLS Offloading, Encryption, and Certificates with NGINX and NGINX Plus](https://www.nginx.com/blog/nginx-ssl/)  
 [DockerHub - nginx](https://hub.docker.com/_/nginx)  
 [DockerHub - nginxinc/nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
+⇄ Alternatives  
+[DockerHub - caddy](https://hub.docker.com/_/caddy)  
+[DockerHub - haproxy](https://hub.docker.com/_/haproxy)  
 
 ### GitLab
 [GitLab - GitLab.org - omnibus-gitlab - docker/assets/wrapper](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/docker/assets/wrapper)  
@@ -40,6 +43,8 @@
 [GitLab - Product documentation - Install - Installation methods - Docker - Install GitLab using Docker Compose](https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-compose)  
 [GitLab - Product documentation - Use GitLab - Use CI/CD to build your Application](https://docs.gitlab.com/ee/topics/build_your_application.html)  
 [DockerHub - gitlab/gitlab-ce](https://hub.docker.com/r/gitlab/gitlab-ce)  
+⇄ Alternatives  
+[DockerHub - gitea/gitea](https://hub.docker.com/r/gitea/gitea)  
 
 ### GitLab Runner
 [GitHub - Yelp - dumb-init](https://github.com/Yelp/dumb-init)  
@@ -60,7 +65,16 @@
 [Redmine](https://www.redmine.org/)  
 [DockerHub - redmine](https://hub.docker.com/_/redmine)  
 
+### Rocket.Chat
+[DockerHub - rocketchat/rocket.chat](https://hub.docker.com/r/rocketchat/rocket.chat)  
+⇄ Alternatives  
+[DockerHub - matrixdotorg/synapse](https://hub.docker.com/r/matrixdotorg/synapse)  
+[DockerHub - inspircd/inspircd-docker](https://hub.docker.com/r/inspircd/inspircd-docker)  
+
 ### PostgreSQL
 [PostgreSQL - Documentation](https://www.postgresql.org/docs/current/)  
 [DockerHub - postgres](https://hub.docker.com/_/postgres)  
+
+### Bind9
+[DockerHub - internetsystemsconsortium/bind9](https://hub.docker.com/r/internetsystemsconsortium/bind9)  
 

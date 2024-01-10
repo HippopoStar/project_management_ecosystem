@@ -17,6 +17,11 @@ mkdir "${GITLAB_BIND_MOUNTS_DIR}"
 chmod 0755 "${GITLAB_BIND_MOUNTS_DIR}/wrapper"
 ```
 
+## Display uncommented lines in file gitlab.rb
+```
+grep -n -e '^[^#]' configs/gitlab.rb
+```
+
 ## Print GitLab self-signed SSL certificate and NGINX configuration
 ```
 DEVOPS_DOMAIN_NAME=example.com
@@ -24,7 +29,7 @@ GITLAB_SUBDOMAIN_NAME=gitlab
 GITLAB_HOME=/srv/gitlab
 
 openssl x509 -in "${GITLAB_HOME}/config/ssl/${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}.crt" -noout -text
-cat "${GITLAB_HOME}/nginx/conf/gitlab-http.conf"
+cat "${GITLAB_HOME}/data/nginx/conf/gitlab-http.conf"
 ```
 
 ## Get initial root password
