@@ -2,17 +2,15 @@
 ## Retrieve NGINX Docker image default config files
 ```
 DOCKER_IMAGE_TAG_NGINX=stable
-NGINX_CONFIGS_DIR=configs
-
-mkdir "${NGINX_CONFIGS_DIR}"
 
 { docker run --rm nginxinc/nginx-unprivileged:${DOCKER_IMAGE_TAG_NGINX} cat /etc/nginx/nginx.conf ;} \
-	> "${NGINX_CONFIGS_DIR}/nginx.conf"
-
-mkdir "${NGINX_CONFIGS_DIR}/conf.d"
+	> configs/nginx.conf
 
 { docker run --rm nginxinc/nginx-unprivileged:${DOCKER_IMAGE_TAG_NGINX} cat /etc/nginx/conf.d/default.conf ;} \
-	> "${NGINX_CONFIGS_DIR}/conf.d/default.conf"
+	> configs/default.conf
+
+{ docker run --rm nginxinc/nginx-unprivileged:${DOCKER_IMAGE_TAG_NGINX} cat /usr/share/nginx/html/index.html ;} \
+	> configs/index.html
 ```
 
 ## Append servers' addresses to `/etc/hosts`

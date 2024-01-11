@@ -1,4 +1,6 @@
 
+version: '3.4'
+
 services:
 
   nginx:
@@ -7,27 +9,33 @@ services:
     ports:
       - '8080:80'
       - '8443:443'
-    volumes:
-      - type: bind
-        source: ./services/nginx/configs/default.conf
-        target: /tmp/default.conf
-        read_only: true
-      - type: bind
-        source: ./services/nginx/bind_mounts/envsubst_default_conf.sh
-        target: /docker-entrypoint.d/envsubst_default_conf.sh
-        read_only: true
-      - type: bind
-        source: ./services/nginx/bind_mounts/index.html
-        target: /usr/share/nginx/html/index.html
-        read_only: true
-      - type: bind
-        source: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE}
+    secrets:
+      - source: ssl_certificate
         target: /etc/nginx/${SERVER_CERTIFICATE}
-        read_only: true
-      - type: bind
-        source: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE_KEY}
+        uid: '101'
+        gid: '0'
+        mode: 0444
+      - source: ssl_certificate_key
         target: /etc/nginx/${SERVER_CERTIFICATE_KEY}
-        read_only: true
+        uid: '101'
+        gid: '0'
+        mode: 0400
+    configs:
+      - source: nginx_default_conf_template
+        target: /tmp/default.conf.template
+        uid: '101'
+        gid: '0'
+        mode: 0444
+      - source: nginx_envsubst_default_conf_template_sh
+        target: /docker-entrypoint.d/envsubst_default_conf_template.sh
+        uid: '101'
+        gid: '0'
+        mode: 0544
+      - source: nginx_index_html
+        target: /usr/share/nginx/html/index.html
+        uid: '0'
+        gid: '0'
+        mode: 0444
     environment:
       - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
       - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
@@ -49,19 +57,23 @@ services:
     expose:
       - '80'
       - '443'
-    volumes:
-      - type: bind
-        source: ./services/gitlab/configs/gitlab.rb
+    configs:
+      - source: gitlab_gitlab_rb
         target: /etc/gitlab/gitlab.rb
-        read_only: true
-      - type: bind
-        source: ./services/gitlab/bind_mounts/gitlab_pre_reconfigure_script.sh
+        uid: '0'
+        gid: '0'
+        mode: 0400
+      - source: gitlab_gitlab_pre_reconfigure_script_sh
         target: /tmp/gitlab_pre_reconfigure_script.sh
-        read_only: true
-      - type: bind
-        source: ./services/gitlab/bind_mounts/gitlab_post_reconfigure_script.sh
+        uid: '0'
+        gid: '0'
+        mode: 0544
+      - source: gitlab_gitlab_post_reconfigure_script_sh
         target: /tmp/gitlab_post_reconfigure_script.sh
-        read_only: true
+        uid: '0'
+        gid: '0'
+        mode: 0544
+    volumes:
       - type: bind
         source: '${GITLAB_HOME}/config'
         target: '/etc/gitlab'
@@ -109,6 +121,26 @@ services:
 #  postgres:
 #    container_name: postgres
 #    image: postgres:${DOCKER_IMAGE_TAG_POSTGRES}
+
+secrets:
+  ssl_certificate:
+    file: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE}
+  ssl_certificate_key:
+    file: ${CERTIFICATES_DIR}/${SERVER_CERTIFICATE_KEY}
+
+configs:
+  nginx_default_conf_template:
+    file: ./services/nginx/configs/default.conf.template
+  nginx_envsubst_default_conf_template_sh:
+    file: ./services/nginx/configs/envsubst_default_conf_template.sh
+  nginx_index_html:
+    file: ./services/nginx/configs/index.html
+  gitlab_gitlab_rb:
+    file: ./services/gitlab/configs/gitlab.rb
+  gitlab_gitlab_pre_reconfigure_script_sh:
+    file: ./services/gitlab/configs/gitlab_pre_reconfigure_script.sh
+  gitlab_gitlab_post_reconfigure_script_sh:
+    file: ./services/gitlab/configs/gitlab_post_reconfigure_script.sh
 
 networks:
   nginx-gitlab:

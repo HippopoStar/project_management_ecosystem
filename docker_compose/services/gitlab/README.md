@@ -2,19 +2,14 @@
 ## Retrieve GitLab Docker image default config files
 ```
 DOCKER_IMAGE_TAG_GITLAB=latest
-GITLAB_CONFIGS_DIR=configs
-GITLAB_BIND_MOUNTS_DIR=bind_mounts
-
-mkdir "${GITLAB_CONFIGS_DIR}"
 
 { docker run --rm gitlab/gitlab-ce:${DOCKER_IMAGE_TAG_GITLAB} cat /opt/gitlab/etc/gitlab.rb.template ;} \
-	> "${GITLAB_CONFIGS_DIR}/gitlab.rb"
-
-mkdir "${GITLAB_BIND_MOUNTS_DIR}"
+	> configs/gitlab.rb
+chmod 0600 configs/gitlab.rb
 
 { docker run --rm gitlab/gitlab-ce:${DOCKER_IMAGE_TAG_GITLAB} cat /assets/wrapper ;} \
-	> "${GITLAB_BIND_MOUNTS_DIR}/wrapper"
-chmod 0755 "${GITLAB_BIND_MOUNTS_DIR}/wrapper"
+	> configs/wrapper
+chmod 0755 configs/wrapper
 ```
 
 ## Display uncommented lines in file gitlab.rb
