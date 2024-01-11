@@ -33,8 +33,6 @@ services:
       - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
       - SERVER_CERTIFICATE=${SERVER_CERTIFICATE}
       - SERVER_CERTIFICATE_KEY=${SERVER_CERTIFICATE_KEY}
-    extra_hosts:
-      - '${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}:172.31.42.10'
     networks:
       - nginx-gitlab
     restart: always
@@ -82,8 +80,7 @@ services:
         external_url 'http://${GITLAB_SUBDOMAIN_NAME}.${DEVOPS_DOMAIN_NAME}'
         # Add any other gitlab.rb configuration here, each on its own line
     networks:
-      nginx-gitlab:
-        ipv4_address: 172.31.42.10
+      - nginx-gitlab
     shm_size: '256m' # shared memory size
     healthcheck:
       test: [ "CMD-SHELL", "/opt/gitlab/bin/gitlab-healthcheck --fail --max-time 10" ]
@@ -115,8 +112,4 @@ services:
 
 networks:
   nginx-gitlab:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.31.42.0/24
 
