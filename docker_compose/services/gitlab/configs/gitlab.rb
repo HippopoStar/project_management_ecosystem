@@ -710,7 +710,7 @@
 #### Change the initial default admin password and shared runner registration tokens.
 ####! **Only applicable on initial setup, changing these settings after database
 ####!   is created and seeded won't yield any change.**
-gitlab_rails['initial_root_password'] = "5iveL!fe"
+gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_initial_root_password').gsub("\n", "")
 # gitlab_rails['initial_shared_runners_registration_token'] = "token"
 
 #### Toggle if root password should be printed to STDOUT during initialization
@@ -734,14 +734,14 @@ gitlab_rails['initial_root_password'] = "5iveL!fe"
 ### GitLab database settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/database.html
 ###! **Only needed if you use an external database.**
-# gitlab_rails['db_adapter'] = "postgresql"
-# gitlab_rails['db_encoding'] = "unicode"
+gitlab_rails['db_adapter'] = "postgresql"
+gitlab_rails['db_encoding'] = "utf8"
 # gitlab_rails['db_collation'] = nil
 # gitlab_rails['db_database'] = "gitlabhq_production"
-# gitlab_rails['db_username'] = "gitlab"
-# gitlab_rails['db_password'] = nil
-# gitlab_rails['db_host'] = nil
-# gitlab_rails['db_port'] = 5432
+gitlab_rails['db_username'] = "gitlab"
+gitlab_rails['db_password'] = File.read('/run/secrets/gitlab_db_password').gsub("\n", "")
+gitlab_rails['db_host'] = "gitlab_db"
+gitlab_rails['db_port'] = 5432
 # gitlab_rails['db_socket'] = nil
 # gitlab_rails['db_sslmode'] = nil
 # gitlab_rails['db_sslcompression'] = 0
@@ -1317,7 +1317,7 @@ sidekiq['max_concurrency'] = 9
 ###! By default, reconfigure reloads postgresql if it is running. If you
 ###! change any of these settings, be sure to run `gitlab-ctl restart postgresql`
 ###! after reconfigure in order for the changes to take effect.
-# postgresql['enable'] = true
+postgresql['enable'] = false
 # postgresql['listen_address'] = nil
 # postgresql['port'] = 5432
 

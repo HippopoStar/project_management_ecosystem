@@ -7,7 +7,7 @@ set -u
 # https://www.openssl.org/docs/manmaster/man5/config.html
 # https://git.openssl.org/?p=openssl.git;a=blob;f=apps/openssl.cnf;hb=HEAD
 
-G_CERTIFICATES_DIR=~/Documents/certificates
+G_CERTIFICATES_DIR=~/Documents/devops_project_resources/certificates
 
 G_SUBJ_C='FR'
 G_SUBJ_ST='Ile-de-France'
@@ -23,7 +23,7 @@ G_RSA_KEY_LENGTH=3072 # 2048 + 1024
 create_passphrase () {
 	if [ ! -f 'passphrase' ]
 	then
-		pwgen 20 1 -s > 'passphrase'
+		pwgen -s 20 1 > 'passphrase'
 		chmod 0600 'passphrase'
 	fi
 }
