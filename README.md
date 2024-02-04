@@ -32,7 +32,7 @@
 [Docker - Blog - SSL/TLS Offloading, Encryption, and Certificates with NGINX and NGINX Plus](https://www.nginx.com/blog/nginx-ssl/)  
 [DockerHub - nginx](https://hub.docker.com/_/nginx)  
 [DockerHub - nginxinc/nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
-⇄ Alternatives  
+⇄ Alternative(s)  
 [DockerHub - caddy](https://hub.docker.com/_/caddy)  
 [DockerHub - haproxy](https://hub.docker.com/_/haproxy)  
 
@@ -43,7 +43,7 @@
 [GitLab - Product documentation - Install - Installation methods - Docker - Install GitLab using Docker Compose](https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-compose)  
 [GitLab - Product documentation - Use GitLab - Use CI/CD to build your Application](https://docs.gitlab.com/ee/topics/build_your_application.html)  
 [DockerHub - gitlab/gitlab-ce](https://hub.docker.com/r/gitlab/gitlab-ce)  
-⇄ Alternatives  
+⇄ Alternative(s)  
 [DockerHub - gitea/gitea](https://hub.docker.com/r/gitea/gitea)  
 
 ### GitLab Runner
@@ -52,7 +52,7 @@
 [GitLab - Product Documentation - Install - Install GitLab Runner - Docker](https://docs.gitlab.com/runner/install/docker.html)  
 [DockerHub - gitlab/gitlab-runner](https://hub.docker.com/r/gitlab/gitlab-runner)  
 
-### SonarSource
+### SonarQube
 [SonarSource - SonarQube Documentation - Setup and upgrade - Overview](https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/overview/)  
 [SonarSource - SonarQube Documentation - DevOps platform integration - GitLab integration](https://docs.sonarsource.com/sonarqube/latest/devops-platform-integration/gitlab-integration/)  
 [DockerHub - sonarqube](https://hub.docker.com/_/sonarqube)  
@@ -67,7 +67,7 @@
 
 ### Rocket.Chat
 [DockerHub - rocketchat/rocket.chat](https://hub.docker.com/r/rocketchat/rocket.chat)  
-⇄ Alternatives  
+⇄ Alternative(s)  
 [DockerHub - matrixdotorg/synapse](https://hub.docker.com/r/matrixdotorg/synapse)  
 [DockerHub - inspircd/inspircd-docker](https://hub.docker.com/r/inspircd/inspircd-docker)  
 

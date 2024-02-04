@@ -1,4 +1,12 @@
 
+## Clone repository locally on host
+```
+cat ~/.ssh/id_ed25519.pub
+
+REPO_NAME='my_repository'
+git clone ssh://git@gitlab.example.com:2222/root/${REPO_NAME}.git
+```
+
 ## Retrieve GitLab Docker image default config files
 ```
 DOCKER_IMAGE_TAG_GITLAB=latest
@@ -19,6 +27,11 @@ grep -n -e '^[^#]' configs/gitlab.rb
 
 ## Print GitLab self-signed SSL certificate and NGINX configuration
 ```
+# => service up <=
+docker exec gitlab sh -c 'openssl x509 -in /etc/gitlab/ssl/${HOSTNAME}.crt -noout -text'
+docker exec gitlab cat /var/opt/gitlab/nginx/conf/gitlab-http.conf
+
+# => service down <=
 DEVOPS_DOMAIN_NAME=example.com
 GITLAB_SUBDOMAIN_NAME=gitlab
 GITLAB_HOME=/srv/gitlab
