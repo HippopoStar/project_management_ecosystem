@@ -29,7 +29,7 @@
 ##! On AWS EC2 instances, we also attempt to fetch the public hostname/IP
 ##! address from AWS. For more details, see:
 ##! https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
-external_url 'https://${HOSTNAME}'
+external_url 'https://${HOSTNAME}:${GITLAB_CONVEYED_WEB_PORT}'
 
 ## Roles for multi-instance GitLab
 ##! The default is to have no roles enabled, which results in GitLab running as an all-in-one instance.
@@ -675,7 +675,7 @@ external_url 'https://${HOSTNAME}'
 # high_availability['mountpoint'] = ["/var/opt/gitlab/git-data", "/var/opt/gitlab/gitlab-rails/shared"]
 
 ### GitLab Shell settings for GitLab
-# gitlab_rails['gitlab_shell_ssh_port'] = 22
+gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_CONVEYED_SSH_PORT}
 # gitlab_rails['gitlab_shell_git_timeout'] = 800
 
 ### Extra customization

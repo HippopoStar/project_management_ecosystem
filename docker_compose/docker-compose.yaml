@@ -39,6 +39,7 @@ services:
     environment:
       - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
       - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
+      - GITLAB_CONVEYED_WEB_PORT=${GITLAB_CONVEYED_WEB_PORT}
       - SERVER_CERTIFICATE=${SERVER_CERTIFICATE}
       - SERVER_CERTIFICATE_KEY=${SERVER_CERTIFICATE_KEY}
     networks:
@@ -95,6 +96,8 @@ services:
 #        source: '${GITLAB_HOME}/data'
 #        target: '/var/opt/gitlab'
     environment:
+      GITLAB_CONVEYED_WEB_PORT: ${GITLAB_CONVEYED_WEB_PORT}
+      GITLAB_CONVEYED_SSH_PORT: ${GITLAB_CONVEYED_SSH_PORT}
       GITLAB_PRE_RECONFIGURE_SCRIPT: /tmp/gitlab_pre_reconfigure_script.sh
       GITLAB_POST_RECONFIGURE_SCRIPT: /tmp/gitlab_post_reconfigure_script.sh
       GITLAB_LOG_LEVEL: 'WARN'

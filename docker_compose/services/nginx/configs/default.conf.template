@@ -61,9 +61,12 @@ server {
     # https://docs.gitlab.com/omnibus/settings/ssl/#configure-a-reverse-proxy-or-load-balancer-ssl-termination
     location / {
         proxy_pass http://gitlab;
+        proxy_redirect $scheme://$host $scheme://$host:${GITLAB_CONVEYED_WEB_PORT};
         proxy_set_header Host $host;
+        #proxy_set_header X-Forwarded-Ssl off;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #proxy_set_header X-Forwarded-Port $server_port;
     }
 }
 

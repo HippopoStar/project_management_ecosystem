@@ -50,3 +50,10 @@ DOCKER_COMPOSE_SERVICE_GITLAB_NAME=gitlab
 docker exec "${DOCKER_COMPOSE_SERVICE_GITLAB_NAME}" cat /etc/gitlab/initial_root_password
 ```
 
+## Capture TCP traffic
+```
+man pcap-filter
+docker exec gitlab sh -c 'apt-get update && apt-get install -y tcpdump && tcpdump -D'
+{ docker exec gitlab tcpdump -c 1024 -i eth1 -U -w - -- 'tcp src port 80' ;} | tee /tmp/gitlab.pcap
+```
+
