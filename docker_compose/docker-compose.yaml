@@ -21,13 +21,13 @@ services:
         gid: '0'
         mode: 0400
     configs:
-      - source: nginx_default_conf_template
-        target: /tmp/default.conf.template
+      - source: nginx_default_conf_placeholder
+        target: /tmp/default.conf.placeholder
         uid: '101'
         gid: '0'
         mode: 0444
-      - source: nginx_envsubst_default_conf_template_sh
-        target: /docker-entrypoint.d/envsubst_default_conf_template.sh
+      - source: nginx_envsubst_default_conf_placeholder_sh
+        target: /docker-entrypoint.d/envsubst_default_conf_placeholder.sh
         uid: '0'
         gid: '0'
         mode: 0555
@@ -59,29 +59,29 @@ services:
       - '80'
       - '443'
     secrets:
-      - source: gitlab_gitlab_initial_root_password
-        target: gitlab_initial_root_password
+      - source: gitlab_initial_root_password
+        target: initial_root_password
         uid: '0'
         gid: '0'
         mode: 0400
-      - source: gitlab_gitlab_db_password
-        target: gitlab_db_password
+      - source: gitlab_postgres_password
+        target: postgres_password
         uid: '0'
         gid: '0'
         mode: 0400
     configs:
-      - source: gitlab_gitlab_rb
-        target: /tmp/gitlab.rb.template
+      - source: gitlab_gitlab_rb_placeholder
+        target: /tmp/gitlab.rb.placeholder
         uid: '0'
         gid: '0'
         mode: 0400
-      - source: gitlab_gitlab_pre_reconfigure_script_sh
-        target: /tmp/gitlab_pre_reconfigure_script.sh
+      - source: gitlab_pre_reconfigure_script_sh
+        target: /tmp/pre_reconfigure_script.sh
         uid: '0'
         gid: '0'
         mode: 0555
-      - source: gitlab_gitlab_post_reconfigure_script_sh
-        target: /tmp/gitlab_post_reconfigure_script.sh
+      - source: gitlab_post_reconfigure_script_sh
+        target: /tmp/post_reconfigure_script.sh
         uid: '0'
         gid: '0'
         mode: 0555
@@ -98,8 +98,8 @@ services:
     environment:
       GITLAB_CONVEYED_WEB_PORT: ${GITLAB_CONVEYED_WEB_PORT}
       GITLAB_CONVEYED_SSH_PORT: ${GITLAB_CONVEYED_SSH_PORT}
-      GITLAB_PRE_RECONFIGURE_SCRIPT: /tmp/gitlab_pre_reconfigure_script.sh
-      GITLAB_POST_RECONFIGURE_SCRIPT: /tmp/gitlab_post_reconfigure_script.sh
+      GITLAB_PRE_RECONFIGURE_SCRIPT: /tmp/pre_reconfigure_script.sh
+      GITLAB_POST_RECONFIGURE_SCRIPT: /tmp/post_reconfigure_script.sh
       GITLAB_LOG_LEVEL: 'WARN'
       GITLAB_SKIP_TAIL_LOGS: 'true'
       GITLAB_OMNIBUS_CONFIG: "from_file('/omnibus_config.rb')"
@@ -115,7 +115,7 @@ services:
       start_period: 0s
 #    restart: always
     depends_on:
-      - gitlab_db
+      - postgres_gitlab
 
 #  gitlab-runner:
 #    container_name: gitlab-runner
@@ -133,8 +133,8 @@ services:
 #    container_name: redmine
 #    image: redmine:${DOCKER_IMAGE_TAG_REDMINE}
 
-  gitlab_db:
-    container_name: gitlab_db
+  postgres_gitlab:
+    container_name: postgres_gitlab
     image: postgres:${DOCKER_IMAGE_TAG_POSTGRES}
     expose:
       - '5432'
@@ -150,7 +150,7 @@ services:
         gid: '999'
         mode: 0400
     configs:
-      - source: gitlab_db_init_user_db_sh
+      - source: postgres_gitlab_init_user_db_sh
         target: /docker-entrypoint-initdb.d/init_user_db.sh
         uid: '0'
         gid: '0'
@@ -171,30 +171,30 @@ secrets:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/certificates/${SERVER_CERTIFICATE}
   ssl_certificate_key:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/certificates/${SERVER_CERTIFICATE_KEY}
-  gitlab_gitlab_initial_root_password:
-    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/gitlab_initial_root_password.txt
-  gitlab_gitlab_db_password:
-    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/gitlab_db_password.txt
+  gitlab_initial_root_password:
+    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/initial_root_password.txt
+  gitlab_postgres_password:
+    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/postgres_password.txt
   postgres_postgres_password:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/postgres/postgres_password.txt
   postgres_gitlab_password:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/postgres/gitlab_password.txt
 
 configs:
-  nginx_default_conf_template:
-    file: ./services/nginx/configs/default.conf.template
-  nginx_envsubst_default_conf_template_sh:
-    file: ./services/nginx/configs/envsubst_default_conf_template.sh
+  nginx_default_conf_placeholder:
+    file: ./services/nginx/configs/default.conf.placeholder
+  nginx_envsubst_default_conf_placeholder_sh:
+    file: ./services/nginx/configs/envsubst_default_conf_placeholder.sh
   nginx_index_html:
     file: ./services/nginx/configs/index.html
-  gitlab_gitlab_rb:
-    file: ./services/gitlab/configs/gitlab.rb
-  gitlab_gitlab_pre_reconfigure_script_sh:
-    file: ./services/gitlab/configs/gitlab_pre_reconfigure_script.sh
-  gitlab_gitlab_post_reconfigure_script_sh:
-    file: ./services/gitlab/configs/gitlab_post_reconfigure_script.sh
-  gitlab_db_init_user_db_sh:
-    file: ./services/gitlab_db/configs/init_user_db.sh
+  gitlab_gitlab_rb_placeholder:
+    file: ./services/gitlab/configs/gitlab.rb.placeholder
+  gitlab_pre_reconfigure_script_sh:
+    file: ./services/gitlab/configs/pre_reconfigure_script.sh
+  gitlab_post_reconfigure_script_sh:
+    file: ./services/gitlab/configs/post_reconfigure_script.sh
+  postgres_gitlab_init_user_db_sh:
+    file: ./services/postgres_gitlab/configs/init_user_db.sh
 
 networks:
   nginx-gitlab:

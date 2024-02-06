@@ -27,7 +27,7 @@ register_password () {
 configure_gitlab_passwords () {
 	local L_SERVICE_NAME='gitlab'
 
-	register_password 'GitLab initial root password' 'gitlab_initial_root_password.txt' '5iveL!fe'
+	register_password 'GitLab initial root password' 'initial_root_password.txt' '5iveL!fe'
 }
 
 configure_postgres_passwords () {
@@ -37,7 +37,7 @@ configure_postgres_passwords () {
 	sudo chown 999:999 "${G_PASSWORDS_DIR}/${L_SERVICE_NAME}/postgres_password.txt"
 
 	register_password 'PostgreSQL password for GitLab (gitlab)' 'gitlab_password.txt' $( pwgen -s 20 1 )
-	cp "${G_PASSWORDS_DIR}/${L_SERVICE_NAME}/gitlab_password.txt" "${G_PASSWORDS_DIR}/gitlab/gitlab_db_password.txt"
+	cp "${G_PASSWORDS_DIR}/${L_SERVICE_NAME}/gitlab_password.txt" "${G_PASSWORDS_DIR}/gitlab/postgres_password.txt"
 	sudo chown 999:999 "${G_PASSWORDS_DIR}/${L_SERVICE_NAME}/gitlab_password.txt"
 }
 
