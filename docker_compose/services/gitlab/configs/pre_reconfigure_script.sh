@@ -11,8 +11,8 @@ awk \
 		/^[^#]/ \
 		{ \
 			sub(/\${HOSTNAME}/, "'"${HOSTNAME}"'"); \
-			sub(/\${GITLAB_CONVEYED_WEB_PORT}/, "'"${GITLAB_CONVEYED_WEB_PORT}"'"); \
-			sub(/\${GITLAB_CONVEYED_SSH_PORT}/, "'"${GITLAB_CONVEYED_SSH_PORT}"'"); \
+			sub(/\${EXTERNAL_HTTPS_PORT}/, "'"${EXTERNAL_HTTPS_PORT}"'"); \
+			sub(/\${EXTERNAL_SSH_PORT}/, "'"${EXTERNAL_SSH_PORT}"'"); \
 			print $0; \
 		} \
 	' \

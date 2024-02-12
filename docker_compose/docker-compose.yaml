@@ -37,17 +37,25 @@ services:
         gid: '0'
         mode: 0444
     environment:
-      - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
       - DEVOPS_DOMAIN_NAME=${DEVOPS_DOMAIN_NAME}
-      - GITLAB_CONVEYED_WEB_PORT=${GITLAB_CONVEYED_WEB_PORT}
+      - GITLAB_SUBDOMAIN_NAME=${GITLAB_SUBDOMAIN_NAME}
+      - REDMINE_SUBDOMAIN_NAME=${REDMINE_SUBDOMAIN_NAME}
+      - CLOUDBEAVER_SUBDOMAIN_NAME=${CLOUDBEAVER_SUBDOMAIN_NAME}
+      - EXTERNAL_HTTPS_PORT=${EXTERNAL_HTTPS_PORT}
       - SERVER_CERTIFICATE=${SERVER_CERTIFICATE}
       - SERVER_CERTIFICATE_KEY=${SERVER_CERTIFICATE_KEY}
     networks:
       - nginx-gitlab
-    restart: always
+      - nginx-redmine
+      - nginx-cloudbeaver
+#    restart: unless-stopped
     depends_on:
       gitlab:
         condition: service_started # service_started | service_healthy
+      redmine:
+        condition: service_started
+      cloudbeaver:
+        condition: service_started
 
   gitlab:
     container_name: gitlab
@@ -96,8 +104,8 @@ services:
 #        source: '${GITLAB_HOME}/data'
 #        target: '/var/opt/gitlab'
     environment:
-      GITLAB_CONVEYED_WEB_PORT: ${GITLAB_CONVEYED_WEB_PORT}
-      GITLAB_CONVEYED_SSH_PORT: ${GITLAB_CONVEYED_SSH_PORT}
+      EXTERNAL_HTTPS_PORT: ${EXTERNAL_HTTPS_PORT}
+      EXTERNAL_SSH_PORT: ${EXTERNAL_SSH_PORT}
       GITLAB_PRE_RECONFIGURE_SCRIPT: /tmp/pre_reconfigure_script.sh
       GITLAB_POST_RECONFIGURE_SCRIPT: /tmp/post_reconfigure_script.sh
       GITLAB_LOG_LEVEL: 'WARN'
@@ -113,7 +121,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 0s
-#    restart: always
+#    restart: unless-stopped
     depends_on:
       - postgres_gitlab
 
@@ -129,13 +137,54 @@ services:
 #    container_name: jenkins
 #    image: jenkins/jenkins:${DOCKER_IMAGE_TAG_JENKINS}
 
-#  redmine:
-#    container_name: redmine
-#    image: redmine:${DOCKER_IMAGE_TAG_REDMINE}
+  redmine:
+    container_name: redmine
+    image: redmine:${DOCKER_IMAGE_TAG_REDMINE}
+    expose:
+      - '3000'
+    secrets:
+      - source: redmine_postgres_password
+        target: postgres_password
+        uid: '999'
+        gid: '999'
+        mode: 0400
+#    volumes:
+#      - type: bind
+#        source: '${REDMINE_HOME}/redmine'
+#        target: '/usr/src/redmine/files'
+    environment:
+      REDMINE_DB_POSTGRES: postgres_redmine
+      REDMINE_DB_PORT: 5432
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD_FILE: /run/secrets/postgres_password
+      REDMINE_DB_DATABASE: redmine_db
+    networks:
+      - nginx-redmine
+      - redmine-postgres
+#    restart: unless-stopped
+    depends_on:
+      - postgres_redmine
+
+  cloudbeaver:
+    container_name: cloudbeaver
+    image: dbeaver/cloudbeaver:${DOCKER_IMAGE_TAG_CLOUDBEAVER}
+    expose:
+      - '8978'
+#    volumes:
+#      - type: bind
+#        source: '${CLOUDBEAVER_HOME}/cloudbeaver'
+#        target: '/opt/cloudbeaver/workspace'
+    networks:
+      - nginx-cloudbeaver
+      - cloudbeaver-postgres
+#    restart: unless-stopped
+    depends_on:
+      - postgres_gitlab
+      - postgres_redmine
 
   postgres_gitlab:
     container_name: postgres_gitlab
-    image: postgres:${DOCKER_IMAGE_TAG_POSTGRES}
+    image: postgres:${DOCKER_IMAGE_TAG_POSTGRES_GITLAB}
     expose:
       - '5432'
     secrets:
@@ -164,7 +213,42 @@ services:
 #      PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - gitlab-postgres
-    restart: always
+      - cloudbeaver-postgres
+#    restart: unless-stopped
+
+  postgres_redmine:
+    container_name: postgres_redmine
+    image: postgres:${DOCKER_IMAGE_TAG_POSTGRES_REDMINE}
+    expose:
+      - '5432'
+    secrets:
+      - source: postgres_postgres_password
+        target: postgres_password
+        uid: '999'
+        gid: '999'
+        mode: 0400
+      - source: postgres_redmine_password
+        target: redmine_password
+        uid: '999'
+        gid: '999'
+        mode: 0400
+    configs:
+      - source: postgres_redmine_init_user_db_sh
+        target: /docker-entrypoint-initdb.d/init_user_db.sh
+        uid: '0'
+        gid: '0'
+        mode: 0555
+#    volumes:
+#      - type: bind
+#        source: '${REDMINE_HOME}/postgresql'
+#        target: '/var/lib/postgresql/data'
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+#      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - redmine-postgres
+      - cloudbeaver-postgres
+#    restart: unless-stopped
 
 secrets:
   ssl_certificate:
@@ -175,10 +259,14 @@ secrets:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/initial_root_password.txt
   gitlab_postgres_password:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/gitlab/postgres_password.txt
+  redmine_postgres_password:
+    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/redmine/postgres_password.txt
   postgres_postgres_password:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/postgres/postgres_password.txt
   postgres_gitlab_password:
     file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/postgres/gitlab_password.txt
+  postgres_redmine_password:
+    file: ${DEVOPS_PROJECT_RESOURCES_DIR}/passwords/postgres/redmine_password.txt
 
 configs:
   nginx_default_conf_placeholder:
@@ -195,8 +283,14 @@ configs:
     file: ./services/gitlab/configs/post_reconfigure_script.sh
   postgres_gitlab_init_user_db_sh:
     file: ./services/postgres_gitlab/configs/init_user_db.sh
+  postgres_redmine_init_user_db_sh:
+    file: ./services/postgres_redmine/configs/init_user_db.sh
 
 networks:
   nginx-gitlab:
+  nginx-redmine:
+  nginx-cloudbeaver:
   gitlab-postgres:
+  redmine-postgres:
+  cloudbeaver-postgres:
 

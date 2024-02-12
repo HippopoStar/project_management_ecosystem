@@ -28,8 +28,9 @@
 
 ### NGINX
 [NGINX - Education - Glossary - What Is a Reverse Proxy Server?](https://www.nginx.com/resources/glossary/reverse-proxy-server/)  
+[NGINX - Blog - SSL/TLS Offloading, Encryption, and Certificates with NGINX and NGINX Plus](https://www.nginx.com/blog/nginx-ssl/)  
+[NGINX - Blog - Real-Time Web Applications with WebSocket and NGINX](https://www.nginx.com/blog/realtime-applications-nginx/)  
 [Docker - Blog - How to Use the NGINX Docker Official Image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/)  
-[Docker - Blog - SSL/TLS Offloading, Encryption, and Certificates with NGINX and NGINX Plus](https://www.nginx.com/blog/nginx-ssl/)  
 [DockerHub - nginx](https://hub.docker.com/_/nginx)  
 [DockerHub - nginxinc/nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged)  
 ⇄ Alternative(s)  
@@ -70,6 +71,10 @@
 ⇄ Alternative(s)  
 [DockerHub - matrixdotorg/synapse](https://hub.docker.com/r/matrixdotorg/synapse)  
 [DockerHub - inspircd/inspircd-docker](https://hub.docker.com/r/inspircd/inspircd-docker)  
+
+### CloudBeaver
+[DBeaver - Resources - Documentation - CloudBeaver](https://dbeaver.com/docs/cloudbeaver/)  
+[DockerHub - dbeaver/cloudbeaver](https://hub.docker.com/r/dbeaver/cloudbeaver)  
 
 ### PostgreSQL
 [PostgreSQL - Documentation](https://www.postgresql.org/docs/current/)  
